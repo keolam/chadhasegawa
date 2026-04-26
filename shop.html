@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHOP — Studio Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Notable&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ede8df;
+    --bg-alt: #e4ddd0;
+    --ink: #2a2623;
+    --ink-soft: #5a524b;
+    --rule: #cbc2b2;
+    --accent: #c1441f;
+    --accent-soft: #e8d5c4;
+    --shadow: 0 30px 60px -20px rgba(42, 38, 35, 0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(193, 68, 31, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(42, 38, 35, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ========= Header ========= */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(237, 232, 223, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .nav-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .logo {
+    font-family: 'Notable', serif;
+    font-weight: 400;
+    font-size: 2.85rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color:#2a2623
+  }
+
+  .logo span { color: var(--accent); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  nav a:hover, nav a.active { color: var(--accent); }
+
+  nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .cart-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0.65rem 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border-radius: 999px;
+  }
+
+  .cart-btn:hover { background: var(--accent); }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    width: 40px;
+    height: 40px;
+    position: relative;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: var(--ink);
+    position: absolute;
+    left: 9px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .menu-toggle span:nth-child(1) { top: 14px; }
+  .menu-toggle span:nth-child(2) { top: 20px; }
+  .menu-toggle span:nth-child(3) { top: 26px; }
+
+  .menu-toggle.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .menu-toggle.active span:nth-child(2) { opacity: 0; }
+  .menu-toggle.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ========= Hero ========= */
+  .hero {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-meta::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    font-variation-settings: "opsz" 144;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .hero-desc {
+    max-width: 500px;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  /* ========= Filters ========= */
+  .filter-bar {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-soft);
+    padding: 0.6rem 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 999px;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .filter-btn.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+
+  .sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .sort-wrap select {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink-soft);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 1.5rem 0.3rem 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3e%3cpath d='M1 1l4 4 4-4' stroke='%232a2623' fill='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+  }
+
+  /* ========= Gallery grid ========= */
+  .gallery {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 3rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    animation: fadeUp 0.6s ease both;
+    animation-delay: calc(var(--i) * 60ms);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-img-wrap {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-alt);
+    aspect-ratio: 4 / 5;
+  }
+
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+    display: block;
+  }
+
+  .card:hover .card-img-wrap img { transform: scale(1.04); }
+
+  .card-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.65rem;
+    background: var(--bg);
+    color: var(--ink);
+    border-radius: 2px;
+  }
+
+  .card-badge.sold { background: var(--ink); color: var(--bg); }
+  .card-badge.new { background: var(--accent); color: var(--bg); }
+
+  .card-count {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.55rem;
+    background: rgba(237, 232, 223, 0.9);
+    backdrop-filter: blur(4px);
+    color: var(--ink);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .card:hover .card-count { opacity: 1; }
+
+  .card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+    font-variation-settings: "opsz" 48;
+  }
+
+  .card-title em { font-style: italic; }
+
+  .card-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.15rem;
+  }
+
+  .card-meta .price { color: var(--ink); font-weight: 500; }
+  .card-meta .price.sold { text-decoration: line-through; opacity: 0.5; }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 6rem 2rem;
+    color: var(--ink-soft);
+  }
+
+  .no-results h3 {
+    font-size: 2rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ========= Modal / Lightbox ========= */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(42, 38, 35, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 100;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    overflow-y: auto;
+  }
+
+  .modal.open {
+    display: block;
+    opacity: 1;
+  }
+
+  .modal-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .modal-close {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+    background: var(--bg);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 110;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  .modal-close:hover { transform: rotate(90deg); }
+
+  .modal-close::before,
+  .modal-close::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 1.5px;
+    background: var(--ink);
+  }
+  .modal-close::before { transform: rotate(45deg); }
+  .modal-close::after { transform: rotate(-45deg); }
+
+  .modal-gallery {
+    position: relative;
+    background: var(--bg-alt);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .modal-gallery img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .modal-gallery img.active { opacity: 1; }
+
+  .gallery-nav {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 2;
+  }
+
+  .gallery-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(237, 232, 223, 0.5);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .gallery-dot.active {
+    background: var(--bg);
+    transform: scale(1.3);
+  }
+
+  .gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: rgba(237, 232, 223, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink);
+  }
+
+  .gallery-arrow:hover { background: var(--bg); }
+  .gallery-arrow.prev { left: 1rem; }
+  .gallery-arrow.next { right: 1rem; }
+
+  .modal-details {
+    color: var(--bg);
+    padding: 1rem 0;
+  }
+
+  .modal-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .modal-cat::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent-soft);
+  }
+
+  .modal-title {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .modal-title em { font-style: italic; color: var(--accent-soft); }
+
+  .modal-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(237, 232, 223, 0.2);
+  }
+
+  .modal-price .sold-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-left: 1rem;
+  }
+
+  .modal-desc {
+    color: var(--accent-soft);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .modal-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2rem;
+    margin-bottom: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(237, 232, 223, 0.2);
+  }
+
+  .spec-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    opacity: 0.7;
+    margin-bottom: 0.25rem;
+  }
+
+  .spec-value {
+    font-size: 0.95rem;
+    color: var(--bg);
+  }
+
+  .add-cart {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--bg);
+    color: var(--ink);
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    border-radius: 999px;
+  }
+
+  .add-cart:hover { background: var(--accent); color: var(--bg); }
+  .add-cart:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ========= Footer ========= */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 3rem 2rem;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    position: relative;
+    z-index: 1;
+  }
+
+  footer p + p { margin-top: 0.5rem; }
+
+  /* ========= Responsive ========= */
+  @media (max-width: 900px) {
+    .modal-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 5rem 1.5rem 3rem;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .menu-toggle { display: block; }
+    nav ul {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 75%;
+      max-width: 320px;
+      background: var(--bg);
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem;
+      gap: 1.5rem;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: var(--shadow);
+    }
+
+    nav ul.open { transform: translateX(0); }
+    nav a { font-size: 0.9rem; }
+    .cart-btn { padding: 0.5rem 0.9rem; font-size: 0.65rem; }
+    .nav-inner { padding: 1rem 1.25rem; gap: 1rem; }
+
+    .hero { padding: 2.5rem 1.25rem 1.5rem; }
+    .filter-bar { padding: 1.25rem; gap: 1rem; }
+    .sort-wrap { width: 100%; justify-content: space-between; }
+    .gallery {
+      padding: 2rem 1.25rem 3rem;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 2rem 1rem;
+    }
+
+    .card-title { font-size: 0.9rem; }
+    .card-meta { font-size: 0.62rem; }
+  }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 3rem; }
+    .modal-close {
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  /* ========= Accessibility ========= */
+  button:focus-visible, a:focus-visible, select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="#" class="logo">Chad<span>·</span>Hasegawa</a>
+    <nav>
+      <ul id="nav-list">
+        <li><a href="#">Bio</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#" class="active">Shop</a></li>
+        <li><a href="#">Video</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <button class="cart-btn" type="button">Cart (<span id="cart-count">0</span>)</button>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-meta">Edition 07 · Autumn 2026 · All originals</div>
+  <h1>Works <em>on</em> paper,<br>wood, canvas.</h1>
+  <p class="hero-desc">A rotating archive of originals, editions, and oddities from the studio. Each piece is hand-finished, numbered when applicable, and shipped with a certificate.</p>
+</section>
+
+<div class="filter-bar">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="painting">Painting</button>
+    <button class="filter-btn" data-filter="print">Print</button>
+    <button class="filter-btn" data-filter="paper">Paper</button>
+  </div>
+  <div class="sort-wrap">
+    <label for="sort">Sort</label>
+    <select id="sort">
+      <option value="new">Newest</option>
+      <option value="low">Price — Low</option>
+      <option value="high">Price — High</option>
+      <option value="az">A → Z</option>
+    </select>
+  </div>
+</div>
+
+<main class="gallery" id="gallery"></main>
+
+<footer>
+  <p>© 2026 Studio Archive — All works © the artist</p>
+  <p>Inquiries — studio@archive.example</p>
+</footer>
+
+<!-- Modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <button class="modal-close" id="modal-close" aria-label="Close"></button>
+  <div class="modal-inner">
+    <div class="modal-gallery" id="modal-gallery">
+      <button class="gallery-arrow prev" id="gal-prev" aria-label="Previous image">‹</button>
+      <button class="gallery-arrow next" id="gal-next" aria-label="Next image">›</button>
+      <div class="gallery-nav" id="gallery-nav"></div>
+    </div>
+    <div class="modal-details">
+      <div class="modal-cat" id="modal-cat">Painting</div>
+      <h2 class="modal-title" id="modal-title">Untitled</h2>
+      <div class="modal-price" id="modal-price">$0</div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-specs" id="modal-specs"></div>
+      <button class="add-cart" id="add-cart">Add to cart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ======== Data ========
+  const artworks = [
+    {
+      id: 1, title: 'Sewn paper flower — <em>Frida</em>', cat: 'paper', catLabel: 'Paper · Ink',
+      price: 1500, sold: true, new: false,
+      year: '2025', medium: 'Sewn paper, thread, frame', size: '15 × 14.5 × 1.25 in', edition: 'Unique',
+      desc: 'A bloom built from salvaged paper and hand-stitched in the round. Framed in raw oak, sealed against time.',
+      images: [260, 261, 262, 263]
+    },
+    {
+      id: 2, title: '"Head games"', cat: 'drawing', catLabel: 'Paper · Ink',
+      price: 1600, sold: true, new: false,
+      year: '2025', medium: 'Low-fire ceramic, oxide wash', size: '12 × 11 × 9 in', edition: 'Unique',
+      desc: 'Slab-built and coil-assembled. The glaze pools where it wants to. That is the deal with ceramic.',
+      images: [431, 432, 433]
+    },
+    {
+      id: 3, title: '"Der for sure"', cat: 'painting', catLabel: 'Painting · Acrylic on wood',
+      price: 2900, sold: false, new: true,
+      year: '2025', medium: 'Acrylic on wood panel', size: '24 × 24 × 2 in', edition: 'Unique',
+      desc: 'Layered flats, dry-brushed edges, and a palette pulled from late afternoons in the studio.',
+      images: [164, 165, 166]
+    },
+    {
+      id: 4, title: '<em>Yi-WO</em> — duner', cat: 'painting', catLabel: 'Painting - Acrylic on canvas',
+      price: 550, sold: false, new: false,
+      year: '2023', medium: 'C-print, Japanese chalk stamp, India ink', size: '11 × 9 × 1.5 in', edition: 'AP',
+      desc: 'A coastal fragment marked with studio stamps. Ink added by hand after the print dried.',
+      images: [1039, 1040]
+    },
+    {
+      id: 5, title: '"Water tablet — gg"', cat: 'painting', catLabel: 'Painting · Acrylic',
+      price: 700, sold: false, new: true,
+      year: '2025', medium: 'Acrylic on plywood', size: '21 × 7 × 0.5 in', edition: 'Unique',
+      desc: 'Long, narrow, and tactile. A sketch-surface treated as a finished object.',
+      images: [177, 178, 179]
+    },
+    {
+      id: 6, title: '"Le Sliviar w/ Kass"', cat: 'photo', catLabel: 'Photograph · C-print',
+      price: 800, sold: true, new: false,
+      year: '2024', medium: 'C-print, chalk stamp, India ink', size: '17.5 × 13 × 1 in', edition: '1 of 3',
+      desc: 'A portrait at dusk, marked and sealed in the archive set.',
+      images: [237, 238]
+    },
+    {
+      id: 7, title: '<em>Aakukii</em>', cat: 'print', catLabel: 'Print · Block & watercolor',
+      price: 700, sold: false, new: false,
+      year: '2025', medium: 'Framed block print with watercolor', size: '15.5 × 13 × 1 in', edition: 'AP',
+      desc: 'Carved from soft birch, inked in two passes, and hand-tinted at the edges.',
+      images: [338, 339]
+    },
+    {
+      id: 8, title: '"Evening report"', cat: 'painting', catLabel: 'Painting · Acrylic on canvas',
+      price: 3400, sold: false, new: true,
+      year: '2026', medium: 'Oil on linen-wrapped canvas', size: '30 × 24 × 1.5 in', edition: 'Unique',
+      desc: 'A large flat, built in dusk-colored passes. Brush kept wide, horizon kept low.',
+      images: [1040, 1041, 1042]
+    },
+    {
+      id: 9, title: '"Small urn, bigger mood"', cat: 'print', catLabel: 'Print · Block & acrylic',
+      price: 420, sold: false, new: false,
+      year: '2024', medium: 'Wheel-thrown stoneware, ash glaze', size: '8 × 6 × 6 in', edition: 'Unique',
+      desc: 'A modest vessel with an outsized opinion of itself. Ash glaze runs pleasantly.',
+      images: [225, 226]
+    },
+    {
+      id: 10, title: '<em>Quiet riot</em> — plate I', cat: 'print', catLabel: 'Print · Letterpress',
+      price: 180, sold: false, new: false,
+      year: '2024', medium: 'Letterpress on Stonehenge', size: '11 × 15 in', edition: '12 of 40',
+      desc: 'Pulled by hand on a Vandercook. Some plates bite deeper than others; that is the idea.',
+      images: [159, 160]
+    },
+    {
+      id: 11, title: '"Cloud register — 3am"', cat: 'painting', catLabel: 'Painting · Acrylic on canvas',
+      price: 950, sold: false, new: true,
+      year: '2025', medium: 'Silver gelatin print, selenium toned', size: '16 × 20 in', edition: '2 of 8',
+      desc: 'Exposed through a long night. Toned the next afternoon. Signed in graphite.',
+      images: [1015, 1016]
+    },
+    {
+      id: 12, title: '<em>Folded field</em>', cat: 'paper', catLabel: 'Paper · Ink',
+      price: 620, sold: false, new: false,
+      year: '2024', medium: 'Collage on 300gsm paper', size: '14 × 11 × 0.25 in', edition: 'Unique',
+      desc: 'Cut, creased, and laid flat. The folds catch the light and never quite relax.',
+      images: [1043, 1044, 1045]
+    }
+  ];
+
+  // Local images from public/images
+  const imageFiles = [
+    '626411563_18376418215086904_8041467930838580135_n.jpg',
+    'CHAD2.jpg',
+    'Chad3.jpg',
+    'Chad4.jpg',
+    'Chad5.jpg',
+    'Chad7.jpg',
+    'Chad6.jpg'
+  ];
+  const imgUrl = (seed) =>
+    `public/images/${imageFiles[seed % imageFiles.length]}`;
+
+  // ======== State ========
+  let filter = 'all';
+  let sort = 'new';
+  let cart = 0;
+  let currentArt = null;
+  let currentImgIdx = 0;
+
+  // ======== Render gallery ========
+  const gallery = document.getElementById('gallery');
+
+  function filterSort(list) {
+    let items = filter === 'all' ? [...list] : list.filter(a => a.cat === filter);
+    if (sort === 'low') items.sort((a, b) => a.price - b.price);
+    else if (sort === 'high') items.sort((a, b) => b.price - a.price);
+    else if (sort === 'az') items.sort((a, b) =>
+      a.title.replace(/<[^>]*>/g, '').localeCompare(b.title.replace(/<[^>]*>/g, ''))
+    );
+    else items.sort((a, b) => b.id - a.id);
+    return items;
+  }
+
+  function render() {
+    const items = filterSort(artworks);
+    gallery.innerHTML = '';
+    if (items.length === 0) {
+      gallery.innerHTML = `
+        <div class="no-results">
+          <h3>No works found</h3>
+          <p>Try a different filter.</p>
+        </div>`;
+      return;
+    }
+    items.forEach((a, i) => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.style.setProperty('--i', i);
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `View details for ${a.title.replace(/<[^>]*>/g, '')}`);
+
+      const badge = a.sold
+        ? '<span class="card-badge sold">Sold</span>'
+        : (a.new ? '<span class="card-badge new">New</span>' : '');
+
+      card.innerHTML = `
+        <div class="card-img-wrap">
+          ${badge}
+          <img src="${imgUrl(a.images[0])}" alt="${a.title.replace(/<[^>]*>/g, '')}" loading="lazy">
+          ${a.images.length > 1 ? `<span class="card-count">+${a.images.length - 1} more</span>` : ''}
+        </div>
+        <div class="card-info">
+          <h3 class="card-title">${a.title}</h3>
+          <div class="card-meta">
+            <span>${a.catLabel}</span>
+            <span class="price ${a.sold ? 'sold' : ''}">$${a.price.toLocaleString()}</span>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => openModal(a));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(a);
+        }
+      });
+      gallery.appendChild(card);
+    });
+  }
+
+  // ======== Filter / sort interactions ========
+  document.getElementById('filters').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter = btn.dataset.filter;
+    render();
+  });
+
+  document.getElementById('sort').addEventListener('change', e => {
+    sort = e.target.value;
+    render();
+  });
+
+  // ======== Modal ========
+  const modal = document.getElementById('modal');
+  const modalGallery = document.getElementById('modal-gallery');
+  const galleryNav = document.getElementById('gallery-nav');
+
+  function openModal(art) {
+    currentArt = art;
+    currentImgIdx = 0;
+
+    document.getElementById('modal-cat').textContent = art.catLabel;
+    document.getElementById('modal-title').innerHTML = art.title;
+    document.getElementById('modal-price').innerHTML =
+      `$${art.price.toLocaleString()}${art.sold ? '<span class="sold-tag">· Sold out</span>' : ''}`;
+    document.getElementById('modal-desc').textContent = art.desc;
+
+    document.getElementById('modal-specs').innerHTML = `
+      <div><div class="spec-label">Year</div><div class="spec-value">${art.year}</div></div>
+      <div><div class="spec-label">Edition</div><div class="spec-value">${art.edition}</div></div>
+      <div><div class="spec-label">Medium</div><div class="spec-value">${art.medium}</div></div>
+      <div><div class="spec-label">Size</div><div class="spec-value">${art.size}</div></div>
+    `;
+
+    const addBtn = document.getElementById('add-cart');
+    addBtn.disabled = art.sold;
+    addBtn.textContent = art.sold ? 'Sold out' : 'Add to cart';
+
+    // Build image slides
+    modalGallery.querySelectorAll('img').forEach(n => n.remove());
+    art.images.forEach((seed, i) => {
+      const img = document.createElement('img');
+      img.src = imgUrl(seed, 1000, 1250);
+      img.alt = `${art.title.replace(/<[^>]*>/g, '')} — view ${i + 1}`;
+      if (i === 0) img.classList.add('active');
+      modalGallery.insertBefore(img, modalGallery.firstChild);
+    });
+
+    // Build dots
+    galleryNav.innerHTML = '';
+    if (art.images.length > 1) {
+      art.images.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to image ${i + 1}`);
+        dot.addEventListener('click', () => showImg(i));
+        galleryNav.appendChild(dot);
+      });
+    }
+
+    // Show/hide arrows if single image
+    const multi = art.images.length > 1;
+    document.getElementById('gal-prev').style.display = multi ? 'flex' : 'none';
+    document.getElementById('gal-next').style.display = multi ? 'flex' : 'none';
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    currentArt = null;
+  }
+
+  function showImg(idx) {
+    if (!currentArt) return;
+    const imgs = modalGallery.querySelectorAll('img');
+    const dots = galleryNav.querySelectorAll('.gallery-dot');
+    currentImgIdx = (idx + imgs.length) % imgs.length;
+    imgs.forEach((img, i) => img.classList.toggle('active', i === currentImgIdx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentImgIdx));
+  }
+
+  document.getElementById('gal-prev').addEventListener('click', () => showImg(currentImgIdx - 1));
+  document.getElementById('gal-next').addEventListener('click', () => showImg(currentImgIdx + 1));
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'Escape') closeModal();
+    else if (e.key === 'ArrowLeft') showImg(currentImgIdx - 1);
+    else if (e.key === 'ArrowRight') showImg(currentImgIdx + 1);
+  });
+
+  // ======== Add to cart ========
+  document.getElementById('add-cart').addEventListener('click', () => {
+    if (!currentArt || currentArt.sold) return;
+    cart += 1;
+    document.getElementById('cart-count').textContent = cart;
+    const btn = document.getElementById('add-cart');
+    btn.textContent = 'Added ✓';
+    setTimeout(() => { btn.textContent = 'Add to cart'; }, 1400);
+  });
+
+  // ======== Mobile menu ========
+  const toggle = document.getElementById('menu-toggle');
+  const navList = document.getElementById('nav-list');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('active');
+    navList.classList.toggle('open');
+  });
+  navList.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => {
+      toggle.classList.remove('active');
+      navList.classList.remove('open');
+    })
+  );
+
+  // ======== Init ========
+  render();
+</script>
+
+</body>
+</html>
