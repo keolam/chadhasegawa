@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CART — Chad Hasegawa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Notable&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="shop.html" class="logo">Chad<span>·</span>Hasegawa</a>
+    <nav>
+      <ul id="nav-list">
+        <li><a href="#">Bio</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="shop.html" class="active">Shop</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <a href="cart.html" class="cart-btn">Cart (<span id="cart-count">0</span>)</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-meta">Your cart</div>
+  <h1>Review <em style="font-style:italic;color:var(--accent)">order</em></h1>
+
+  <div id="cart-layout-wrap">
+    <!-- Populated by JS -->
+  </div>
+
+  <div class="confirmation" id="confirmation">
+    <div class="confirm-icon">✦</div>
+    <h2>Order received.</h2>
+    <p>Thank you — a confirmation will reach you shortly. Your work ships within 5 business days.</p>
+    <a href="shop.html" class="back-link" style="margin:0 auto;">Back to shop</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Chad Hasegawa — All works © the artist</p>
+  <p>Inquiries — Ope@chee.hoo</p>
+</footer>
+
+<script>
+  // ======== Cart storage ========
+  function loadCart() {
+    return JSON.parse(localStorage.getItem('ch_cart') || '[]');
+  }
+  function saveCart(items) {
+    localStorage.setItem('ch_cart', JSON.stringify(items));
+  }
+
+  // ======== Render ========
+  const wrap = document.getElementById('cart-layout-wrap');
+
+  function fmt(n) { return '$' + n.toLocaleString(); }
+
+  function render() {
+    const items = loadCart();
+    document.getElementById('cart-count').textContent = items.reduce((s, i) => s + i.qty, 0);
+
+    if (items.length === 0) {
+      wrap.innerHTML = `
+        <div class="empty">
+          <h2>Nothing here yet.</h2>
+          <p>Head back to the shop and find something worth keeping.</p>
+          <a href="shop.html" class="back-link">Back to shop</a>
+        </div>`;
+      return;
+    }
+
+    const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
+    const shipping = 0;
+    const total = subtotal + shipping;
+
+    // Affirm monthly estimate (12 months, ~0% APR display)
+    const monthly = Math.ceil(total / 12);
+
+    wrap.innerHTML = `
+      <div class="cart-layout">
+        <div class="cart-items">
+          <div class="cart-header">
+            <span></span>
+            <span>Item</span>
+            <span>Price</span>
+          </div>
+          <div id="item-list"></div>
+        </div>
+
+        <div class="checkout-panel">
+          <div class="panel-heading">Order summary</div>
+          <div class="summary-rows">
+            <div class="summary-row"><span>Subtotal</span><span id="subtotal-val">${fmt(subtotal)}</span></div>
+            <div class="summary-row"><span>Shipping</span><span>Calculated at contact</span></div>
+            <div class="summary-row total"><span>Total</span><span id="total-val">${fmt(total)}</span></div>
+          </div>
+
+          <div class="payment-section">
+            <div class="payment-heading">Payment method</div>
+            <div class="payment-tabs">
+              <button class="pay-tab active" data-method="card">Card</button>
+              <button class="pay-tab" data-method="paypal">Zelle</button>
+              <button class="pay-tab" data-method="venmo">Venmo</button>
+              <button class="pay-tab" data-method="affirm">Affirm</button>
+            </div>
+
+            <!-- Credit card -->
+            <div class="pay-panel active" id="panel-card">
+              <div class="cc-form">
+                <div class="field-group">
+                  <label for="cc-name">Name on card</label>
+                  <input id="cc-name" type="text" placeholder="Full name" autocomplete="cc-name">
+                </div>
+                <div class="field-group">
+                  <label for="cc-num">Card number</label>
+                  <input id="cc-num" type="text" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number" inputmode="numeric">
+                </div>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label for="cc-exp">Expiry</label>
+                    <input id="cc-exp" type="text" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" inputmode="numeric">
+                  </div>
+                  <div class="field-group">
+                    <label for="cc-cvc">CVC</label>
+                    <input id="cc-cvc" type="text" placeholder="123" maxlength="4" autocomplete="cc-csc" inputmode="numeric">
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="cc-email">Email for receipt</label>
+                  <input id="cc-email" type="email" placeholder="you@example.com" autocomplete="email">
+                </div>
+                <button class="cc-submit" id="cc-submit">Place order — ${fmt(total)}</button>
+                <div class="secure-note">🔒 Encrypted &amp; secure</div>
+              </div>
+            </div>
+
+            <!-- Zelle -->
+            <div class="pay-panel" id="panel-paypal">
+              <button class="paypal-btn" id="paypal-btn">Pay with Zelle — ${fmt(total)}</button>
+              <p class="pay-note">You'll be redirected to Zelle to complete your purchase.</p>
+            </div>
+
+            <!-- Venmo -->
+            <div class="pay-panel" id="panel-venmo">
+              <button class="venmo-btn" id="venmo-btn">Pay with Venmo — ${fmt(total)}</button>
+              <p class="pay-note">Send payment to @ChadHasegawa and include your order details in the note.</p>
+            </div>
+
+            <!-- Affirm -->
+            <div class="pay-panel" id="panel-affirm">
+              <div class="affirm-card">
+                <div class="affirm-label">Pay over time</div>
+                <div class="affirm-amount">~${fmt(monthly)}<span style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--ink-soft)">/mo</span></div>
+                <div class="affirm-detail">12 monthly payments · Subject to Affirm approval</div>
+              </div>
+              <button class="affirm-btn" id="affirm-btn">Continue with Affirm — ${fmt(total)}</button>
+              <p class="pay-note">You'll be redirected to Affirm to complete your application.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    renderItems(items);
+    bindPaymentTabs();
+    bindCheckout(total);
+  }
+
+  function renderItems(items) {
+    const list = document.getElementById('item-list');
+    list.innerHTML = '';
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.dataset.id = item.id;
+      row.innerHTML = `
+        <img class="item-thumb" src="${item.image}" alt="${item.title}">
+        <div class="item-info">
+          <div class="item-title">${item.title}</div>
+          <div class="item-label">${item.catLabel}</div>
+          <div class="item-qty">
+            <button class="qty-btn" data-action="dec" data-id="${item.id}" aria-label="Decrease quantity">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" data-action="inc" data-id="${item.id}" aria-label="Increase quantity">+</button>
+          </div>
+          <button class="remove-btn" data-id="${item.id}">Remove</button>
+        </div>
+        <div class="item-price">${fmt(item.price * item.qty)}</div>
+      `;
+      list.appendChild(row);
+    });
+
+    list.addEventListener('click', e => {
+      const id = parseInt(e.target.dataset.id);
+      if (isNaN(id)) return;
+      const cart = loadCart();
+      if (e.target.classList.contains('remove-btn')) {
+        saveCart(cart.filter(i => i.id !== id));
+        render();
+      } else if (e.target.dataset.action === 'inc') {
+        cart.find(i => i.id === id).qty += 1;
+        saveCart(cart);
+        render();
+      } else if (e.target.dataset.action === 'dec') {
+        const item = cart.find(i => i.id === id);
+        if (item.qty > 1) { item.qty -= 1; saveCart(cart); render(); }
+        else { saveCart(cart.filter(i => i.id !== id)); render(); }
+      }
+    });
+  }
+
+  function bindPaymentTabs() {
+    document.querySelectorAll('.pay-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.method).classList.add('active');
+      });
+    });
+  }
+
+  function showConfirmation() {
+    wrap.style.display = 'none';
+    document.getElementById('confirmation').classList.add('visible');
+    saveCart([]);
+  }
+
+  function bindCheckout(total) {
+    // Credit card — basic validation
+    const ccNum = document.getElementById('cc-num');
+    ccNum.addEventListener('input', () => {
+      let v = ccNum.value.replace(/\D/g, '').slice(0, 16);
+      ccNum.value = v.replace(/(.{4})/g, '$1 ').trim();
+    });
+    const ccExp = document.getElementById('cc-exp');
+    ccExp.addEventListener('input', () => {
+      let v = ccExp.value.replace(/\D/g, '').slice(0, 4);
+      if (v.length > 2) v = v.slice(0, 2) + ' / ' + v.slice(2);
+      ccExp.value = v;
+    });
+
+    document.getElementById('cc-submit').addEventListener('click', () => {
+      const name = document.getElementById('cc-name').value.trim();
+      const num = document.getElementById('cc-num').value.replace(/\s/g, '');
+      const exp = document.getElementById('cc-exp').value.trim();
+      const cvc = document.getElementById('cc-cvc').value.trim();
+      const email = document.getElementById('cc-email').value.trim();
+      if (!name || num.length < 15 || exp.length < 4 || cvc.length < 3 || !email) {
+        alert('Please fill in all card fields.');
+        return;
+      }
+      showConfirmation();
+    });
+
+    document.getElementById('paypal-btn').addEventListener('click', showConfirmation);
+    document.getElementById('venmo-btn').addEventListener('click', showConfirmation);
+    document.getElementById('affirm-btn').addEventListener('click', showConfirmation);
+  }
+
+  // ======== Mobile menu ========
+  const toggle = document.getElementById('menu-toggle');
+  const navList = document.getElementById('nav-list');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('active');
+    navList.classList.toggle('open');
+  });
+
+  // ======== Init ========
+  render();
+</script>
+
+</body>
+</html>
